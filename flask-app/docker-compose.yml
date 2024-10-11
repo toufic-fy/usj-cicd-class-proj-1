@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  flask-app:
+    build: ./app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+    networks:
+      - app-network
+
+  redis:
+    image: "redis:alpine"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app-network
+
+volumes:
+  redis-data:
+
+networks:
+  app-network:
