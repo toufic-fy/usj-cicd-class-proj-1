@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-ons: ubuntu-latest
 
+    # Define your custom variable
+    env:
+      APP_NAME: ${{ github.app_name }}
+
     steps:
       #step 1 checkout repo
       - name: Checkout code
@@ -21,7 +25,7 @@ jobs:
       #step 3 build the image
       - name: Build docker image
         run: |
-          docker build -t ${{ github.app_name }}:latest .
+          docker build -t ${{ env.APP_NAME }}:latest .
       
       # add SSH key
       - name: Add SSH key
@@ -39,4 +43,4 @@ jobs:
 
           git pull origin main
           docker-compose up --build -d
-        EOF
+EOF
