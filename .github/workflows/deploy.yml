@@ -1,0 +1,42 @@
+name: CI/CD Pipeline for Docker Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-ons: ubuntu-latest
+
+    steps:
+      #step 1 checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      #step 2 set up docker environment
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      #step 3 build the image
+      - name: Build docker image
+        run: |
+          docker build -t ${{ github.app_name }}:latest .
+      
+      # add SSH key
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+
+          cd /path/to/your/project
+
+          docker-compose down
+
+          git pull origin main
+          docker-compose up --build -d
+        EOF
