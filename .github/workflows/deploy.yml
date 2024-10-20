@@ -12,7 +12,7 @@ jobs:
     # Define your custom variable
     env:
       APP_NAME: ${{ github.app_name }}
-      DEPLOYMENT_PATH: /home/cicdclass/request-counter-app
+      DEPLOYMENT_PATH: ${{ github.deployment_path }}
 
     steps:
       # Step 1: Checkout code
