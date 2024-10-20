@@ -14,11 +14,11 @@ jobs:
       APP_NAME: ${{ github.app_name }}
 
     steps:
-      #step 1 checkout repo
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      #step 2 set up docker environment
+      # Step 2: Set up Docker environment
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
@@ -33,19 +33,19 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-app:latest ./app
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-app:latest
       
-      # Step 5: add SSH key
+      # Step 5: Add SSH key
       - name: Add SSH key
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 6: Transfer docker-compose to the server
+      # Step 6: Transfer docker-compose.yml to the server
       - name: Transfer docker-compose.yml
         run: |
           scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/path/to/deployment
 
       # Step 7: Deploy to the server via SSH
-    - name: Deploy to server
+      - name: Deploy to server  # Indentation fixed
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} '
             cd /home/cicdclass/request-counter-app
@@ -55,3 +55,4 @@ jobs:
 
             # Restart the services with the new images
             docker-compose up --build -d
+          '
