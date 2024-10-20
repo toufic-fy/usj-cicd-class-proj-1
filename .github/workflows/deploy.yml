@@ -31,8 +31,8 @@ jobs:
       # Step 4: Build and push the Flask app Docker image to Docker Hub
       - name: Build and push Flask app image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO_NAME }}:latest ./flask-app/app
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO_NAME }}:latest
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/base_repo:latest ./flask-app/app
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/base_repo:latest
       
       # Step 5: Add SSH key
       - name: Add SSH key
