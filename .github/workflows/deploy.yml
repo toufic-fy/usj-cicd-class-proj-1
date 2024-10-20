@@ -25,13 +25,13 @@ jobs:
       # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub
         run: |
-          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       # Step 4: Build and push the Flask app Docker image to Docker Hub
       - name: Build and push Flask app image
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask-app:latest ./app
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO_NAME }}:latest
       
       # Step 5: Add SSH key
       - name: Add SSH key
