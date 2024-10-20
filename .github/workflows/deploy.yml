@@ -43,7 +43,7 @@ jobs:
       # Step 6: Transfer docker-compose.yml to the server
       - name: Transfer docker-compose.yml
         run: |
-          scp -o StrictHostKeyChecking=no ./flasl-app/docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:${{ env.DEPLOYMENT_PATH }}
+          scp -o StrictHostKeyChecking=no ./flask-app/docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:${{ env.DEPLOYMENT_PATH }}
 
       # Step 7: Deploy to the server via SSH
       - name: Deploy to server  # Indentation fixed
