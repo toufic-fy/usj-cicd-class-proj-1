@@ -12,6 +12,7 @@ jobs:
     # Define your custom variable
     env:
       APP_NAME: ${{ github.app_name }}
+      DEPLOYMENT_PATH: /home/cicdclass/request-counter-app
 
     steps:
       # Step 1: Checkout code
@@ -42,13 +43,13 @@ jobs:
       # Step 6: Transfer docker-compose.yml to the server
       - name: Transfer docker-compose.yml
         run: |
-          scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:/path/to/deployment
+          scp -o StrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:${{ DEPLOYMENT_PATH }}
 
       # Step 7: Deploy to the server via SSH
       - name: Deploy to server  # Indentation fixed
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} '
-            cd /home/cicdclass/request-counter-app
+            cd ${{ env.DEPLOYMENT_PATH }}
 
             # Pull the updated images from Docker Hub
             docker-compose pull
