@@ -11,8 +11,8 @@ jobs:
 
     # Define your custom variable
     env:
-      APP_NAME: ${{ github.app_name }}
-      DEPLOYMENT_PATH: ${{ github.deployment_path }}
+      APP_NAME: ${{ github.APP_NAME }}
+      DEPLOYMENT_PATH: ${{ github.DEPLOYMENT_PATH }}
 
     steps:
       # Step 1: Checkout code
