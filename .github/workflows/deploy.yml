@@ -48,7 +48,7 @@ jobs:
     - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} '
-            cd /path/to/deployment
+            cd /home/cicdclass/request-counter-app
 
             # Pull the updated images from Docker Hub
             docker-compose pull
