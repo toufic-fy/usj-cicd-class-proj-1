@@ -1,0 +1,12 @@
+# Docker
+*.log
+Dockerfile
+docker-compose.yml
+
+#python
+__init__.py
+requirements.txt
+__pycache__
+
+#redis
+redis.conf
