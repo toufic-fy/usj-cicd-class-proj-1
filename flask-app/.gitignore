@@ -1,5 +1,17 @@
+# Docker
+*.log
+Dockerfile
+docker-compose.yml
+
+#python
+__init__.py
+requirements.txt
 __pycache__/
 *.pyc
-.DS_Store
+
+#data
 data/
 logs/
+
+#redis
+redis.conf
