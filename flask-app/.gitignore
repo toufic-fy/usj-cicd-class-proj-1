@@ -6,7 +6,12 @@ docker-compose.yml
 #python
 __init__.py
 requirements.txt
-__pycache__
+__pycache__/
+*.pyc
+
+#data
+data/
+logs/
 
 #redis
 redis.conf

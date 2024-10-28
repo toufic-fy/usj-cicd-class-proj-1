@@ -1,24 +1,12 @@
-version: '3'
-
+version: '3.8'
 services:
-  flask-app:
-    build: ./app
+  web:
+    image: obtouf/base_repo:latest
     ports:
       - "5000:5000"
-    volumes:
-      - ./app:/app
-    networks:
-      - app-network
-
+    depends_on:
+      - redis
   redis:
     image: "redis:alpine"
-    volumes:
-      - redis-data:/data
-    networks:
-      - app-network
-
-volumes:
-  redis-data:
-
-networks:
-  app-network:
+    ports:
+      - "6379:6379"

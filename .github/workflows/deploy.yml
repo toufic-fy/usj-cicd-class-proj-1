@@ -1,0 +1,60 @@
+name: CI/CD Pipeline for Docker Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Define your custom variable
+    env:
+      APP_NAME: ${{ github.APP_NAME }}
+      DEPLOYMENT_PATH: ${{ github.DEPLOYMENT_PATH }}
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Docker environment
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      # Step 4: Build and push the Flask app Docker image to Docker Hub
+      - name: Build and push Flask app image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/base_repo:latest ./flask-app/app
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/base_repo:latest
+      
+      # Step 5: Add SSH key
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Step 6: Transfer docker-compose.yml to the server
+      - name: Transfer docker-compose.yml
+        run: |
+          scp -o StrictHostKeyChecking=no ./flask-app/docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }}:${{ env.DEPLOYMENT_PATH }}
+
+      # Step 7: Deploy to the server via SSH
+      - name: Deploy to server  # Indentation fixed
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} '
+            docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" -p "${{ secrets.DOCKERHUB_TOKEN }}"
+            cd ${{ env.DEPLOYMENT_PATH }}
+
+            # Pull the updated images from Docker Hub
+            docker-compose pull
+
+            # Restart the services with the new images
+            docker-compose up --build -d
+          '
