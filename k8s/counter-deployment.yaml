@@ -1,0 +1,25 @@
+# counter-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: counter
+  template:
+    metadata:
+      labels:
+        app: counter
+    spec:
+      containers:
+      - name: counter
+        image: obtouf/base_repo:latest
+        ports:
+        - containerPort: 5000
+        env:
+          - name: REDIS_HOST
+            value: "redis-service"
+      imagePullSecrets:
+        - name: dockerhub-secret

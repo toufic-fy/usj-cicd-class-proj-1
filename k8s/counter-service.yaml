@@ -1,0 +1,13 @@
+# counter-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-service
+spec:
+  type: NodePort
+  selector:
+    app: counter
+  ports:
+  - port: 5000
+    targetPort: 5000
+    nodePort: 30007
