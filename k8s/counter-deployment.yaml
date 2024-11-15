@@ -19,7 +19,23 @@ spec:
         ports:
         - containerPort: 5000
         env:
-          - name: REDIS_HOST
-            value: "redis-service"
+        - name: REDIS_HOST
+          value: "redis-service"
+          name: LOG_FILE_PATH
+          value: "/var/log/counter-app/counter.log"
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/counter-app
+        #Sidecar container for logging
+      - name: counter-logger
+        image: busybox
+        command: ["sh", "-c", "while true; do tail -f /var/log/counter-app/counter.log; sleep 5; done"]
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/counter-app
+      # Shared volume for log files
+      volumes:
+      - name: shared-logs
+        emptyDir: {}
       imagePullSecrets:
         - name: dockerhub-secret
